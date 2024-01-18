@@ -41,20 +41,7 @@
                 ?>
                 </select>
         </tr>
-        <tr>
-            <td>Bab</td>
-            <td><select name="id_bab" optional>
-        <option value="NULL">Tidak Memilih Bab</option>
-
-                <?php
-                include "koneksi.php";
-                $query = mysqli_query($koneksi,"SELECT * FROM bab") or die (mysqli_error($koneksi));
-                while($data = mysqli_fetch_array($query)){
-                    echo "<option value=$data[id]> $data[name] </option>";
-                }
-                ?>
-                </select>
-        </tr>
+        
         <tr>
             <td>Isi Tafsir</td>
             <td>
@@ -76,14 +63,14 @@ if(isset($_POST['proses'])){
     $text = mysqli_real_escape_string($koneksi, $_POST['text']);
     $id_verse = mysqli_real_escape_string($koneksi, $_POST['id_verse']);
     $id_tafsir = mysqli_real_escape_string($koneksi, $_POST['id_tafsir']);
-    $id_bab = isset($_POST['id_bab']) && $_POST['id_bab'] !== "NULL" ? mysqli_real_escape_string($koneksi, $_POST['id_bab']) : NULL;
+    
 
     // Gunakan prepared statement untuk mencegah SQL Injection
-    $query = "INSERT INTO verse_tafsirs SET text=?, id_verse=?, id_tafsir=?, id_bab=?";
+    $query = "INSERT INTO verse_tafsirs SET text=?, id_verse=?, id_tafsir=?";
     $stmt = mysqli_prepare($koneksi, $query);
 
     // Bind parameter ke prepared statement
-    mysqli_stmt_bind_param($stmt, "siii", $text, $id_verse, $id_tafsir, $id_bab);
+    mysqli_stmt_bind_param($stmt, "sii", $text, $id_verse, $id_tafsir);
 
     // Eksekusi statement
     mysqli_stmt_execute($stmt);
